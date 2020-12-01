@@ -12,27 +12,64 @@ const App = () => {
   const [snake, setSnake] = useState(SNAKE_START);
   const [apple, setApple] = useState(APPLE_START);
   const [dir, setDir] = useState([0,-1]);
-  const [speed, setSpeed] = useState(1000);
-  const [gameOver, setgameOver] = useState(null);
+  const [speed, setSpeed] = useState(500);
+  const [gameOver, setGameOver] = useState(null);
   
-  const startGame = () => {}
+  const startGame = () => {
+    setSnake(SNAKE_START)
+    setApple(APPLE_START)
+    setDir([0,-1])
+    setSpeed(SPEED)
+    setGameOver(null)
+  }
 
-  const endGame = () =>{}
+  const endGame = () =>{
+    setSpeed(null)
+    setGameOver(true)
+  }
 
-  //const moveSnake = ({keyCode}) => keyCode >= 37 && keyCode <= 40 && setDir(DIRECTIONS[keyCode])
-  const moveSnake = ({ keyCode }) => setDir(DIRECTIONS[keyCode])
+  const moveSnake = ({ keyCode }) =>
+    keyCode >= 37 && keyCode <= 40 && setDir(DIRECTIONS[keyCode]);
+  //const moveSnake = ({ keyCode }) => setDir(DIRECTIONS[keyCode])
 
-  const createApple = () => {}
+  const createApple = () => 
+    apple.map((_a, i)=> Math.floor(Math.random() * (CANVAS_SIZE[i]) / SCALE))
 
-  const checkCollision = () =>  {}
+  const checkCollision = (piece, snk = snake) => {
+    if (
+      piece[0]  * SCALE >= CANVAS_SIZE[0] || 
+      piece[0] < 0 || 
+      piece[1]  * SCALE >= CANVAS_SIZE[1] || 
+      piece[1] < 0
+    )
+    return true
 
-  const checkAppleCollision = () =>{}
+    for (const segment of snk){
+      if(piece[0] === segment[0] && piece[1] === segment[1]) return true
+    }
+      
+    return false
+  }
+
+  const checkAppleCollision = newSnake =>{
+    if (newSnake[0][0] === apple[0] && newSnake[0][1] === apple[1]){
+      let newApple = createApple()
+        while (checkCollision(newApple, newSnake)){
+          newApple = createApple()
+        }
+        setApple(newApple)
+        return true
+    }
+    return false
+  }
 
   const gameLoop = () => {
     const snakeCopy = JSON.parse(JSON.stringify(snake))
     const newSnakeHead = [snakeCopy[0][0] + dir[0], snakeCopy[0][1] + dir[1]]
     snakeCopy.unshift(newSnakeHead)
-    snakeCopy.pop()
+    if (checkCollision(newSnakeHead)) endGame()
+    if (!checkAppleCollision(snakeCopy)) snakeCopy.pop()
+
     setSnake(snakeCopy)
   }
 
@@ -46,10 +83,19 @@ const App = () => {
     context.fillRect(apple[0], apple[1],1,1)
   }, [snake, apple, gameOver] )
 
+ 
+  useEffect(() => {
+    if (window){
+      window.addEventListener('keydown', (e)=>moveSnake(e));
+    }
+  });
+
   useInterval(()=> gameLoop(), speed)
 
+   
+  
   return (
-    <div role="button" tabIndex="0" onKeyDown={e => moveSnake(e)}>
+    <div role="button" tabIndex="0" >
       <canvas
         style={{ border: "1px solid black"}}
         ref={canvasRef}
