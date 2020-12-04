@@ -2,9 +2,7 @@ import React, {useState, useRef, useEffect} from 'react';
 import {useInterval} from './Container/useInterval'
 import{CANVAS_SIZE, SNAKE_START, APPLE_START, SCALE,SPEED,DIRECTIONS} from './Container/constants'
 import './App.css';
-import GameBoard from './Container/GameBoard'
-import Login from './Container/Login'
-import NavBar from './Container/NavBar'
+
 
 const App = () => {
 
@@ -12,7 +10,7 @@ const App = () => {
   const [snake, setSnake] = useState(SNAKE_START);
   const [apple, setApple] = useState(APPLE_START);
   const [dir, setDir] = useState([0,-1]);
-  const [speed, setSpeed] = useState(500);
+  const [speed, setSpeed] = useState(600);
   const [gameOver, setGameOver] = useState(null);
   
   const startGame = () => {
@@ -77,9 +75,9 @@ const App = () => {
     const context = canvasRef.current.getContext("2d")
     context.setTransform(SCALE, 0, 0, SCALE, 0, 0)
     context.clearRect(0,0, CANVAS_SIZE[0], CANVAS_SIZE[1])
-    context.fillStyle = "red"
+    context.fillStyle = "blue"
     snake.forEach(([x,y]) => context.fillRect(x,y,1,1))
-    context.fillStyle = "lightgreen"
+    context.fillStyle = "orange"
     context.fillRect(apple[0], apple[1],1,1)
   }, [snake, apple, gameOver] )
 
@@ -95,19 +93,23 @@ const App = () => {
    
   
   return (
-    <div role="button" tabIndex="0" >
-      <canvas
-        style={{ border: "1px solid black"}}
-        ref={canvasRef}
-        width={`${CANVAS_SIZE[0]}px`}
-        height={`${CANVAS_SIZE[1]}px`}
-      />
-        {gameOver && <div>GAME OVER!</div>}  
-        <button onClick={startGame}>Start Game</button>
+    <div className="App">
+
+      <div role="button" tabIndex="0" className="div">
+        <canvas
+          style={{ border: "1px solid black"}}
+          ref={canvasRef}
+          width={`${CANVAS_SIZE[0]}px`}
+          height={`${CANVAS_SIZE[1]}px`}
+          className="board"
+        />
+      </div>
+      <div className="rightColumn">
+        <button className="startButton" onClick={startGame}>Start Game</button>
+        {gameOver && <div className="text">GAME OVER!</div>}  
+      </div>
     </div>
   )
 }
-
-
 
 export default App;
