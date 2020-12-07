@@ -97,7 +97,6 @@ const App = () => {
 
       <div role="button" tabIndex="0" className="div">
         <canvas
-          style={{ border: "1px solid black"}}
           ref={canvasRef}
           width={`${CANVAS_SIZE[0]}px`}
           height={`${CANVAS_SIZE[1]}px`}
@@ -105,7 +104,7 @@ const App = () => {
         />
       </div>
       <div className="rightColumn">
-        <button className="startButton" onClick={startGame}>Start Game</button>
+        <button className="startButton" onClick={startGame}>{gameOver ? "Start Game" : "Restart Game"}</button>
         {gameOver && <div className="text">GAME OVER!</div>}  
       </div>
     </div>
