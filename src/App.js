@@ -106,6 +106,7 @@ const App = () => {
       <div className="rightColumn">
         <img src="https://i.postimg.cc/xjv8kq2T/Snake-Game-Logo.png"></img>
         <button className="startButton" onClick={startGame}>{gameOver ? "Start Game" : "Restart Game"}</button>
+        <p className="alertText">Snake size: <span id="length">{snake.length}</span> blocks!</p>
         {gameOver && <div className="text">GAME OVER!</div>}  
       </div>
     </div>
