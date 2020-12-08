@@ -14,7 +14,7 @@ margin-bottom: 25px;
 }
 
 .rightColumn {
-  padding-top: 6em;
+  padding-top: -2em;
   display: flex;
   flex-direction: column;
   width: 40%;
@@ -36,5 +36,6 @@ margin-bottom: 25px;
   font-weight: bold;
   margin-left: 25%;
   margin-bottom: 100px;
+  margin-top: -100px;
   width: 50%;
 }
